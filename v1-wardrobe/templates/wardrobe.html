@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}我的衣橱 - AI 智能衣橱{% endblock %}
+{% block body %}
+<div class="tabs">
+  <a class="ftab {{ 'on' if current=='全部' }}" href="{{ url_for('wardrobe', cat='全部') }}">全部</a>
+  {% for c in categories %}
+  <a class="ftab {{ 'on' if current==c }}" href="{{ url_for('wardrobe', cat=c) }}">{{ c }}</a>
+  {% endfor %}
+</div>
+{% if clothes %}
+<div class="grid">
+  {% for c in clothes %}
+  <div class="gitem">
+    <button class="del" onclick="if(confirm('删除这件衣服？'))location='{{ url_for('delete', cid=c['id']) }}'">×</button>
+    <img src="{{ url_for('static', filename='uploads/'+c['image']) }}">
+    <div class="ginfo">{{ c['color'] }} · {{ c['material'] }}<small>{{ c['category'] }} · {{ c['fit'] }}</small></div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="card center" style="padding:50px 20px">
+  <div class="logo">🧺</div>
+  <p class="muted">这里空空的，去添加一件衣服吧</p>
+  <button class="btn" onclick="location='{{ url_for('add') }}'">去添加衣服</button>
+</div>
+{% endif %}
+{% endblock %}
