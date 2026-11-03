@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}今日穿搭 - AI 智能衣橱{% endblock %}
+{% block body %}
+<div class="card">
+  <div class="title">今日穿搭</div>
+  <form method="post">
+    <div class="row"><span>今天温度 (°C)</span>
+      <input type="number" name="temperature" placeholder="如 22" required>
+    </div>
+    <div class="row"><span>天气</span>
+      <select name="weather">
+        {% for w in weathers %}<option>{{ w }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="sec">穿衣要求</div>
+    <div class="tags">
+      {% for s in scenes %}
+      <label class="tag"><input type="radio" name="scene" value="{{ s }}" hidden
+        onchange="pick(this)">{{ s }}</label>
+      {% endfor %}
+    </div>
+    <div class="sec">补充说明（选填）</div>
+    <textarea name="extra" placeholder="如：不要穿裙子 / 想要显腿长"></textarea>
+    <button class="btn">让豆包帮我搭配</button>
+  </form>
+</div>
+{% if result %}
+<div class="card">
+  <div class="title">✨ 推荐搭配
+    <span class="badge {{ 'ai' if is_ai else 'mock' }}">{{ '豆包AI' if is_ai else '模拟推荐' }}</span>
+  </div>
+  <div class="result">{{ result }}</div>
+</div>
+{% endif %}
+<script>
+function pick(input){
+  document.querySelectorAll('.tags .tag').forEach(t=>t.classList.remove('on'));
+  input.closest('.tag').classList.add('on');
+}
+</script>
+{% endblock %}

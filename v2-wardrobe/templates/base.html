@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}AI 智能衣橱{% endblock %}</title>
+<style>
+  :root{--main:#e8a1a8;--main-dark:#d98a92;--bg:#f7f7f7;--text:#333;--muted:#999}
+  *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+  body{background:var(--bg);color:var(--text);padding-bottom:80px}
+  .wrap{max-width:480px;margin:0 auto;padding:16px}
+  .card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+  .title{font-size:18px;font-weight:600;margin-bottom:14px}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid #f2f2f2;font-size:14px;color:#666}
+  .row input,.row select{border:none;text-align:right;font-size:14px;color:var(--text);outline:none;background:transparent}
+  .row input{width:140px}
+  .btn{display:block;background:var(--main);color:#fff;border:none;border-radius:22px;padding:13px 0;width:100%;font-size:15px;margin-top:16px;cursor:pointer}
+  .btn:active{background:var(--main-dark)}
+  .tags{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
+  .tag{padding:6px 15px;border-radius:16px;background:#f5f5f5;color:#666;font-size:13px;cursor:pointer}
+  .tag.on{background:var(--main);color:#fff}
+  .sec{font-size:13px;color:#666;margin:12px 0 2px}
+  input[type=text],input[type=password],input[type=number],textarea{
+    width:100%;border:none;background:#f5f5f5;border-radius:10px;padding:12px;font-size:14px;outline:none}
+  textarea{height:80px;resize:none}
+  .flash{background:#fff7e6;color:#b26b00;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:12px}
+  .grid{display:flex;flex-wrap:wrap;gap:10px}
+  .gitem{width:calc(50% - 5px);background:#fff;border-radius:10px;overflow:hidden;position:relative}
+  .gitem img{width:100%;height:150px;object-fit:cover;background:#f0eeee;display:block}
+  .ginfo{padding:8px;font-size:12px}
+  .ginfo small{color:var(--muted);display:block;margin-top:2px}
+  .del{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.45);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:13px;cursor:pointer}
+  .imgbox{height:210px;border:2px dashed #ddd;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);font-size:13px;gap:8px;text-align:center;cursor:pointer;overflow:hidden}
+  .imgbox img{max-width:100%;max-height:100%;object-fit:cover}
+  .result{white-space:pre-wrap;font-size:14px;line-height:1.9;color:#444}
+  .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:8px;margin-left:6px}
+  .badge.ai{background:#e6f7ef;color:#0a8f56}.badge.mock{background:#fff1f0;color:#c0504d}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .ftab{padding:7px 16px;background:#fff;border-radius:16px;font-size:13px;color:#666;text-decoration:none}
+  .ftab.on{background:var(--main);color:#fff}
+  .nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #eee;display:flex;max-width:480px;margin:0 auto}
+  .nav a{flex:1;text-align:center;padding:10px 0 12px;font-size:11px;color:var(--muted);text-decoration:none}
+  .nav a span{display:block;font-size:19px;margin-bottom:2px}
+  .nav a.on{color:var(--main)}
+  .center{text-align:center;padding:70px 24px}
+  .logo{font-size:52px;margin-bottom:12px}
+  .muted{color:var(--muted);font-size:13px}
+  .hint{font-size:12px;color:var(--muted);margin-top:8px;text-align:center}
+  a{color:var(--main)}
+</style>
+</head>
+<body>
+{% if session.get('user_id') %}
+<nav class="nav">
+  <a href="{{ url_for('outfit') }}" class="{{ 'on' if request.endpoint=='outfit' }}"><span>✨</span>今日穿搭</a>
+  <a href="{{ url_for('wardrobe') }}" class="{{ 'on' if request.endpoint=='wardrobe' }}"><span>👗</span>我的衣橱</a>
+  <a href="{{ url_for('add') }}" class="{{ 'on' if request.endpoint=='add' }}"><span>➕</span>添加衣服</a>
+  <a href="{{ url_for('profile') }}" class="{{ 'on' if request.endpoint=='profile' }}"><span>👤</span>我的</a>
+</nav>
+{% endif %}
+<div class="wrap">
+  {% with messages = get_flashed_messages() %}
+    {% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}
+  {% endwith %}
+  {% block body %}{% endblock %}
+</div>
+</body>
+</html>
