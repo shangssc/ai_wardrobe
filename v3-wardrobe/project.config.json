@@ -1,0 +1,16 @@
+{
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "compileType": "miniprogram",
+  "appid": "请替换为你的AppID",
+  "projectname": "ai-wardrobe",
+  "libVersion": "3.4.10",
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "cloudfunctionTemplateRoot": ""
+  },
+  "condition": {}
+}

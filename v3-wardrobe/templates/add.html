@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}添加衣服 - AI 智能衣橱{% endblock %}
+{% block body %}
+<div class="card">
+  <div class="title">添加衣服</div>
+  <form method="post" enctype="multipart/form-data" id="form">
+    <div class="imgbox" id="imgbox" onclick="document.getElementById('fileGallery').click()">
+      <span style="font-size:42px">📷</span>
+      点击选择图片
+      <span style="font-size:11px">拍照或从相册选都行</span>
+    </div>
+    <!-- 相册/通用入口：不加 capture，系统会让你选是拍照还是选文件 -->
+    <input type="file" name="image" id="fileGallery" accept="image/*" hidden onchange="preview(this)">
+
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button type="button" class="btn btn-light" style="margin-top:0"
+              onclick="document.getElementById('fileCamera').click()">📸 直接拍照</button>
+      <button type="button" class="btn btn-light" style="margin-top:0"
+              onclick="document.getElementById('fileGallery').click()">🖼 从相册选择</button>
+    </div>
+    <!-- 拍照专用：capture 强制调起后置摄像头 -->
+    <input type="file" id="fileCamera" accept="image/*" capture="environment" hidden onchange="fillTo(this)">
+
+    <div class="sec">分类</div>
+    <div class="tags">
+      {% for c in categories %}
+      <label class="tag"><input type="radio" name="category" value="{{ c }}" hidden
+        onchange="pick(this)">{{ c }}</label>
+      {% endfor %}
+    </div>
+    <div class="sec">材质</div>
+    <div class="tags">
+      {% for m in materials %}
+      <label class="tag"><input type="radio" name="material" value="{{ m }}" hidden
+        onchange="pick(this)">{{ m }}</label>
+      {% endfor %}
+    </div>
+    <div class="sec">版型</div>
+    <div class="tags">
+      {% for f in fits %}
+      <label class="tag"><input type="radio" name="fit" value="{{ f }}" hidden
+        onchange="pick(this)">{{ f }}</label>
+      {% endfor %}
+    </div>
+    <div class="sec">颜色</div>
+    <div class="tags">
+      {% for c in colors %}
+      <label class="tag"><input type="radio" name="color" value="{{ c }}" hidden
+        onchange="pick(this)">{{ c }}</label>
+      {% endfor %}
+    </div>
+    <button class="btn">加入衣橱</button>
+  </form>
+</div>
+<script>
+function preview(input){
+  if(input.files && input.files[0]){
+    var box=document.getElementById('imgbox');
+    box.style.border='2px solid var(--main)';
+    box.innerHTML='<img src="'+URL.createObjectURL(input.files[0])+'">';
+  }
+}
+// 相机拍的照片要转到真正提交的表单字段里
+function fillTo(cameraInput){
+  if(cameraInput.files && cameraInput.files[0]){
+    var dt = new DataTransfer();
+    dt.items.add(cameraInput.files[0]);
+    document.getElementById('fileGallery').files = dt.files;
+    preview(cameraInput);
+  }
+}
+function pick(input){
+  var tags=input.closest('.tags').querySelectorAll('.tag');
+  tags.forEach(t=>t.classList.remove('on'));
+  input.closest('.tag').classList.add('on');
+}
+</script>
+{% endblock %}
